@@ -1,0 +1,42 @@
+﻿@using MoviesManagementApi.Dto
+@model MovieDto
+
+<form class="form-check" method="post" asp-controller="Home" asp-action="DeleteMovie">
+    <div class="col-9 row">
+        <table class="table table-bordered table-striped" style="width: 100%">
+            <tbody>
+                <tr>
+                    <td>
+                        <h7 class="text-info mb-1">Title:</h7>
+                        <input disabled class="form-control border-0 shadow mb-4" value="@Model.Title" asp-for="Title" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h7 class="text-info mb-1">Director:</h7>
+                        <input disabled class="form-control border-0 shadow mb-4" value="@Model.Director" asp-for="Director" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h7 class="text-info mb-1">Production year:</h7>
+                        <input disabled class="form-control border-0 shadow mb-4" value="@Model.Year" asp-for="Year" />
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Go Back</a>
+            </div>
+            <div class="col-3">
+                <button type="submit" class="btn btn-danger form-control mb-2">Delete</button>
+            </div>
+        </div>
+    </div>
+    <input hidden class="form-control border-0 shadow mb-4" value="@Model.Id" asp-for="Id" />
+</form>

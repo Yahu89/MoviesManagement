@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "zW2gU+YEaOWbumXlnU1X6M6kW1xs3EiRc9IkFO4HyWc=",
+  "Source": "MoviesManagementApi",
+  "BasePath": "_content/MoviesManagementApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

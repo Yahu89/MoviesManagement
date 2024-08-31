@@ -1,0 +1,176 @@
+﻿@using MoviesManagementApi.Dto
+@model List<MovieDto>
+
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <h2>Movies list:</h2>
+        </div>
+        <div class="col-3">
+            <button type="button" data-toggle="modal" data-target="#addMovieForm" class="btn btn-success form-control mb-2">Add new</button>
+        </div>
+        <div class="col-3">
+            <a class="btn btn-info form-control mb-2" asp-controller="Home" asp-action="GetExternalMovies">Append from external</a>
+        </div>
+    </div>
+</div>
+
+
+<br />
+<div class="col-9 row">
+
+    <table class="table table-bordered table-striped" style="width: 100%">
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Director
+                </th>
+                <th>
+                    Year
+                </th>
+                <th>
+                    Rate
+                </th>
+                <th>
+
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Title
+                    </td>
+                    <td>
+                        @item.Director
+                    </td>
+                    <td>
+                        @item.Year
+                    </td>
+                    <td>
+                        @item.Rate
+                    </td>
+                    <td>
+                        <a class="btn btn-info mb-2" asp-controller="Home" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger mb-2" asp-controller="Home" asp-action="Delete" asp-route-id="@item.Id">Remove</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<form method="POST" id="form" data-url="@Url.Action("Create")">
+<div class="modal fade" id="addMovieForm" tabindex="-1" role="dialog" aria-labelledby="addMovieLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <h5 class="modal-title" id="addMovieLabel">Adding movie</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h7>Put the movie title:</h7>
+                <input id="title"class="form-control border-0 shadow mb-2" name="title" />
+                    <h7 toggle="item-title" id="warnTitle" class="text-danger"></h7><br />
+                <h7>Put a movie Director:</h7>
+                <input id="director" class="form-control border-0 shadow mb-2" name="director" />
+                <h7>Put release year:</h7>
+                <input id="year" class="form-control border-0 shadow mb-2" name="year"/>
+                    <h7 toggle="item-year" id="warnYear" class="text-danger"></h7><br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="submitButton" type="button" class="btn btn-primary">Add Movie</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            $('#submitButton').click((e) => {
+                onSubmit();
+            });
+
+            const onSubmit = () => {    
+
+                let movieData = {
+                    title: '',
+                    director: '',
+                    year: 0,
+                    rate: 0
+                };
+                
+                let isCorrectData = true;
+                
+                let titleWarn = $('#warnTitle');
+                let yearWarn = $('#warnYear');
+                let title = $('#title').val();
+                let year = $('#year').val();
+                let director = $('#director').val();
+
+                titleWarn.text('');
+                yearWarn.text('');
+
+                if (title == '') {
+                    isCorrectData = false;
+                    titleWarn.text('Title musn\'t be empty');
+                }
+
+                let c = parseInt(year);
+
+                if (isNaN(c)) {
+                    isCorrectData = false;
+                    yearWarn.text('Incorrect data');
+                    return;
+                }
+
+                if (!(year >= 1900 && year <= 2200)) {
+                    isCorrectData = false;
+                    yearWarn.text('Year must be between 1900 and 2200');
+                }
+
+                const data = $('#form');
+                movieData.title = title;
+                movieData.director = director;
+                movieData.year = year;
+
+                console.log(data.data('url'))
+                console.log(movieData);
+
+                if (isCorrectData) {
+                  
+                    $.ajax({
+                        url: data.data('url'),
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(movieData),
+                        success: function (response) {
+                            window.location.href = response.redirectToUrl;
+                        },
+                        error: function (error) {
+
+                        }
+                    });
+                }
+            }
+            
+        })
+    </script>
+}
